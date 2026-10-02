@@ -18,13 +18,11 @@ Each livestream has its own directory containing the material from that investig
 OsintWorkshop/
 ├── Chapter01/
 │   ├── README.md
-│   ├── commands/
 │   ├── scripts/
 │   └── resources/
 │
 ├── Chapter02/
 │   ├── README.md
-│   ├── commands/
 │   ├── scripts/
 │   └── resources/
 │
