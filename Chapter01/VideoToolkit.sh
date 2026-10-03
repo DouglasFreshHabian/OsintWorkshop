@@ -262,7 +262,7 @@ ytdlp_menu() {
 
         echo -e "  ${CYAN}1${RESET}) List available video/audio formats"
         echo -e "  ${CYAN}2${RESET}) List available subtitles/captions"
-        echo -e "  ${CYAN}3${RESET}) Download English auto-generated subtitles"
+        echo -e "  ${CYAN}3${RESET}) Download Video with English subtitles"
         echo -e "  ${CYAN}4${RESET}) Download latest yt-dlp Linux binary"
         echo -e "  ${CYAN}5${RESET}) Install yt-dlp to /usr/local/bin/"
         echo -e "  ${CYAN}6${RESET}) Show installed yt-dlp version"
@@ -517,9 +517,9 @@ video_toolkit() {
                     -map 0:v:0 \
                     -an \
                     -vf fps=10 \
-                    "$frame_dir/img%06d.bmp"; then
+                    "$frame_dir/img%06d.png"; then
 
-                    frame_count="$(find "$frame_dir" -type f -name '*.bmp' | wc -l)"
+                    frame_count="$(find "$frame_dir" -type f -name '*.png' | wc -l)"
 
                     echo
                     echo -e "${GREEN}[+] Frame extraction complete.${RESET}"
