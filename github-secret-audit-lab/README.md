@@ -40,3 +40,8 @@ Deleting a secret from the current version of a repository does **not** remove i
 ## Safety
 
 All credentials, keys, phone numbers, email addresses, hostnames, and other identifying information are fictional. The sample private key is deliberately nonfunctional and is included only to demonstrate pattern detection.
+
+<!-- TODO: Download this file before the next lab session.
+     It's needed for the document analysis exercise.
+     Drive: https://drive.google.com/file/d/1lYm3Vt_nGABUiZuuri4pKnHnAQ3sKxYW/view?usp=drivesdk
+-->
