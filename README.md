@@ -19,12 +19,10 @@ OsintWorkshop/
 ├── Chapter01/
 │   ├── README.md
 │   ├── scripts/
-│   └── resources/
 │
 ├── Chapter02/
 │   ├── README.md
 │   ├── scripts/
-│   └── resources/
 │
 └── ...
 ```
