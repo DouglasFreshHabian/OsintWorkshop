@@ -358,6 +358,22 @@ The login menu includes:
 [4] Enter the master token
 ```
 
+We want to choose 2:
+
+```text
+Choice => 2
+Paste the encoded credentials here => <PASTE-BASE64-ENCODED-STRING-HERE>
+
+🔑 A master token has been generated for your account and saved in the credentials
+file, please keep it safe as if it were your password, because it gives access to a
+lot of Google services, and with that, your personal information.
+Master token services access : mail, android, cl, youtube, multilogin, memento
+Generating cookies and osids...
+
+[+] New token for chrome has been generated
+[+] Cookies and osids generated !
+```
+
 For this workflow we use the GHunt Companion browser extension.
 
 ---
