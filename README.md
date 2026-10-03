@@ -23,7 +23,6 @@ OsintWorkshop/
 ├── Chapter02/
 │   ├── README.md
 │   ├── scripts/
-│
 └── ...
 ```
 
