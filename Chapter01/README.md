@@ -186,44 +186,68 @@ This lets us examine what media formats are available before selecting what we w
 
 ---
 
-# 📝 Part 4: Examine Available Subtitles
+# 📝 Part 4: Update yt-dlp
 
-Subtitles can be an important source of investigative information.
+ The toolkit includes an option to download the latest **yt-dlp Linux binary**.
 
-They may contain:
+ Keeping yt-dlp up to date can help maintain compatibility with changes made by video platforms.
 
-- Names
-- Usernames
-- Email addresses
-- URLs
-- Locations
-- Organizations
-- Technical terminology
-- Statements that are difficult to identify by watching the video alone
+ From the yt-dlp menu, select:
 
-From the yt-dlp menu, select:
-
-```text
-2) List available subtitles/captions
+```
+4) Download latest yt-dlp Linux binary
 ```
 
-Enter the YouTube URL.
+ The toolkit will download the latest Linux binary for yt-dlp.
 
-If English auto-generated subtitles are available, the toolkit can download them as an SRT file.
+ Start the yt-dlp tools with:
 
-Select:
-
-```text
-3) Download English auto-generated subtitles
+```
+./VideoToolkit.sh --yt-dlp
 ```
 
-The underlying workflow is:
+ You should see:
 
-```bash
-yt-dlp     --write-auto-subs     --sub-langs "en"     --convert-subs srt     "VIDEO_URL"
+```
+============================================================
+                       yt-dlp TOOLS
+============================================================
+
+  1) List available video/audio formats
+  2) List available subtitles/captions
+  3) Download Video with English subtitles
+  4) Download latest yt-dlp Linux binary
+  5) Install yt-dlp to /usr/local/bin/
+  6) Show installed yt-dlp version
+  7) Return
+
+------------------------------------------------------------
+Choose an option [1-7]:
 ```
 
-Now we have another artifact that can be searched and examined independently of the video.
+ Select:
+
+```
+4
+```
+
+ The toolkit then handles downloading the latest yt-dlp Linux binary.
+
+ After updating, you can use:
+
+```
+6) Show installed yt-dlp version
+```
+
+ to check the currently installed version.
+
+ If you want to make the downloaded binary available system-wide, use:
+
+```
+5) Install yt-dlp to /usr/local/bin/
+```
+
+ This provides a simple way to update and verify yt-dlp directly from the toolkit.
 
 ---
 
