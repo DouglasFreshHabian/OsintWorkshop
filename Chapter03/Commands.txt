@@ -1,20 +1,22 @@
 # Eyewitness
 git clone https://github.com/RedSiege/EyeWitness.git
-cd Eyewitness/setup
+cd EyeWitness/setup
 sudo ./setup.sh
 cd ..
 source eyewitness-venv/bin/activate
 python Python/EyeWitness.py --single https://example.com
-eyewitness --single https://freshforensics.tech -d freshforensics-screens
-nano urls.txt
-eyewitness -f urls.txt -d freshforensics-screens
+python Python/EyeWitness.py -f urls.txt
+python Python/EyeWitness.py -x nmap_scan.xml
+python Python/EyeWitness.py -f urls.txt -d /path/to/output
 
 # Katana
 https://github.com/projectdiscovery/katana
-katana -u https://freshforensics.tech -d 3 -silent -o urls.txt
+Download Linux Binary:
+https://github.com/projectdiscovery/katana/releases/tag/v1.7.0
+./katana -u https://freshforensics.tech -d 3 -silent -o urls.txt
 cat urls.txt
 sort -u urls.txt -o urls.txt
-eyewitness -f urls.txt -d eyewitness-report --headless
+python Python/EyeWitness.py -f urls.txt -d eyewitness-report --headless
 
 # wget (web-crawler)
 wget \
@@ -29,8 +31,11 @@ sort -u
 
 # Install uv
 
-# Carbon14
-git clone https://github.com/Lazza/Carbon14
+# Carbon14 https://github.com/Lazza/Carbon14
+python3 -m venv carbon14Environment
+source carbon14Environment/bin/activate
+pip install carbon14
+carbon14 https://example.com > report.md
 
 # Google Earth
 wget http://dl.google.com/dl/earth/client/current/google-earth-stable_current_amd64.deb
