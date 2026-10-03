@@ -1,0 +1,7 @@
+TRAINING DATA ONLY
+
+Lab gateway: 192.0.2.10
+Lab workstation: 198.51.100.25
+Lab monitoring host: 203.0.113.50
+
+These addresses are from documentation ranges and are not real infrastructure.
