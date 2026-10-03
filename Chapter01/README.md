@@ -579,6 +579,17 @@ Manually cloning dozens of repositories is repetitive.
 
 For this workshop, we use the custom `cloneRepo.sh` script.
 
+First create a clean directory to store all the Repos:
+
+```bash
+mkdir Github
+```
+Then Copy the Script into the directory:
+
+```bash
+cp cloneRepo.sh Github/
+```
+
 Make it executable:
 
 ```bash
@@ -635,10 +646,10 @@ Start with basic Git information:
 git status
 ```
 
-Examine the remote:
+List commits in chronological order:
 
 ```bash
-git remote -v
+git rev-list --all
 ```
 
 View the commit history:
@@ -695,22 +706,6 @@ First check whether it is installed:
 gitleaks version
 ```
 
-If it is not installed, install it using the current installation instructions provided by the Gitleaks project.
-
-Then run it against the repository.
-
-The exact command can depend on the installed Gitleaks version, so check:
-
-```bash
-gitleaks --help
-```
-
-and:
-
-```bash
-gitleaks git --help
-```
-
 The goal is to search the repository and its Git history for known secret patterns.
 
 ---
@@ -720,7 +715,7 @@ The goal is to search the repository and its Git history for known secret patter
 The investigation becomes significantly more efficient with another custom Fresh Forensics script:
 
 ```text
-G1thubAudit
+G1thubAudit.sh
 ```
 
 This script was created specifically to audit Git repositories for potentially sensitive information.
@@ -761,6 +756,8 @@ The available checks include:
 7) Sensitive Filenames — Git History
 8) Email Addresses — Current Files
 9) Gitleaks Secret Scan
+10) Google Drive Links — Current Files
+11) Google Drive Links — Git History
 A) Run ALL Checks
 ```
 
