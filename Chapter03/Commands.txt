@@ -1,24 +1,14 @@
-# Eyewitness
-git clone https://github.com/RedSiege/EyeWitness.git
-cd EyeWitness/setup
-sudo ./setup.sh
-cd ..
-source eyewitness-venv/bin/activate
-python Python/EyeWitness.py --single https://example.com
-python Python/EyeWitness.py -f urls.txt
-python Python/EyeWitness.py -x nmap_scan.xml
-python Python/EyeWitness.py -f urls.txt -d /path/to/output
-
-# Katana
+## Katana
 https://github.com/projectdiscovery/katana
-Download Linux Binary:
+
+# Download Linux Binary:
 https://github.com/projectdiscovery/katana/releases/tag/v1.7.0
 ./katana -u https://freshforensics.tech -d 3 -silent -o urls.txt
 cat urls.txt
 sort -u urls.txt -o urls.txt
 python Python/EyeWitness.py -f urls.txt -d eyewitness-report --headless
 
-# wget (web-crawler)
+## wget (web-crawler)
 wget \
   --spider \
   --recursive \
@@ -29,15 +19,32 @@ grep '^--' |
 awk '{print $3}' |
 sort -u
 
-# Install uv
+## Eyewitness
+git clone https://github.com/RedSiege/EyeWitness.git
+cd EyeWitness/setup
+sudo ./setup.sh
+cd ..
+source eyewitness-venv/bin/activate
+python Python/EyeWitness.py --single https://example.com
+python Python/EyeWitness.py -f urls.txt
+python Python/EyeWitness.py -x nmap_scan.xml
+python Python/EyeWitness.py -f urls.txt -d /path/to/output
 
-# Carbon14 https://github.com/Lazza/Carbon14
+## httrack
+sudo apt instal httrack
+httrack https://freshforensics.tech -O ./fresh-forensics
+cd fresh-forensics
+python3 -m http.server 8888
+open -> http://0.0.0.0:8888/
+
+## Carbon14 https://github.com/Lazza/Carbon14
 python3 -m venv carbon14Environment
 source carbon14Environment/bin/activate
 pip install carbon14
 carbon14 https://example.com > report.md
 
-# Google Earth
+## Google Earth
 wget http://dl.google.com/dl/earth/client/current/google-earth-stable_current_amd64.deb
 sudo apt install -y ./google-earth-stable_current_amd64.deb
 sudo rm google-earth-stable_current_amd64.deb
+
