@@ -421,54 +421,25 @@ but Google's response does not contain the expected `container` value.
 
 The compatibility fix is to safely retrieve the value and only add the cover photo when a container exists.
 
-The patch used during the livestream was:
-
-```bash
-python3 - <<'PY'
-from pathlib import Path
-
-p = Path.home() / ".local/share/pipx/venvs/ghunt/lib/python3.14/site-packages/ghunt/parsers/people.py"
-s = p.read_text()
-
-old = '''                self.coverPhotos[cover_photo_data["metadata"]["container"]] = person_cover_photo'''
-
-new = '''                container = cover_photo_data.get("metadata", {}).get("container")
-                if container:
-                    self.coverPhotos[container] = person_cover_photo'''
-
-if old not in s:
-    raise SystemExit("Target line not found; GHunt may have changed.")
-
-p.write_text(s.replace(old, new))
-print("Patch applied successfully.")
-PY
-```
-
-The important part of the patch is:
-
-```python
-container = cover_photo_data.get("metadata", {}).get("container")
-
-if container:
-    self.coverPhotos[container] = person_cover_photo
-```
-
-Instead of assuming that `metadata.container` always exists, the parser now checks whether the value is actually present.
-
 ---
 
-To apply the patch, run this command:
+### 🚨 IMPORTANT: Apply the GHunt Compatibility Patch
+
+**To apply the patch, run this command:**
 
 ```bash
-sed -i 's/self.coverPhotos\[cover_photo_data\["metadata"\]\["container"\]\] = person_cover_photo/self.coverPhotos[cover_photo_data.get("metadata", {}).get("container", "unknown")] = person_cover_photo/' \
-~/.local/share/pipx/venvs/ghunt/lib/python3.14/site-packages/ghunt/parsers/people.py
+sed -i 's/self.coverPhotos\[cover_photo_data\["metadata"\]\["container"\]\] = person_cover_photo/self.coverPhotos[cover_photo_data.get("metadata", {})\.get("container", "")\] = person_cover_photo/' ~/.local/share/pipx/venvs/ghunt/lib/python3.14/site-packages/ghunt/parsers/people.py
 ```
 
-Then Verify the patch with this command:
+### ✅ VERIFY THE PATCH
+
+**Then verify the patch with this command:**
 
 ```bash
 grep -n "coverPhotos" ~/.local/share/pipx/venvs/ghunt/lib/python3.14/site-packages/ghunt/parsers/people.py
 ```
+
+>⚠️**Important:** Run the verification command after applying the patch to confirm the file was modified as expected.
 
 # 📧 Part 12: Investigating an Email Address
 
@@ -640,11 +611,19 @@ When demonstrating account based functionality, use test accounts or accounts yo
 
 ---
 
-## 🧭 Follow The Breadcrumbs
+## ☕ Support This Project
 
-**Every document has a story.**
+If **OsintWorkShop™** helps you with your OSINT Investigations, consider supporting continued development:
 
-**Every identifier can become a breadcrumb.**
+<p align="center">
+  <a href="https://www.buymeacoffee.com/dfreshZ" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+</p>
 
-**Follow the trail. 🔎**
-```
+---
+
+<!-- 
+    Fresh Forensics, LLC | Douglas Fresh Habian | 2026
+    github.com/DouglasFreshHabian
+    freshforensicsllc@tuta.com
+-->
+
