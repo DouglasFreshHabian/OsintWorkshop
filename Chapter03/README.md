@@ -643,3 +643,20 @@ Do not use these techniques to bypass authentication, access restricted informat
 **Every clue can become another breadcrumb.**
 
 **Follow the trail. 🔎**
+
+
+## ☕ Support This Project
+
+If **OsintWorkShop™** helps you with your OSINT Investigations, consider supporting continued development:
+
+<p align="center">
+  <a href="https://www.buymeacoffee.com/dfreshZ" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+</p>
+
+---
+
+<!-- 
+    Fresh Forensics, LLC | Douglas Fresh Habian | 2026
+    github.com/DouglasFreshHabian
+    freshforensicsllc@tuta.com
+-->
