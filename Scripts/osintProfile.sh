@@ -5,18 +5,16 @@
 # OSINT Firefox Profile Installer
 # =============================================================================
 #
-# Description:
-#   Downloads the Fresh Forensics OSINT Firefox template, creates a dedicated
-#   Firefox profile named Osint, and installs the template into that profile.
+# Downloads the Fresh Forensics OSINT Firefox template from GitHub Releases,
+# creates a dedicated Firefox profile named Osint, installs the template,
+# and optionally launches Firefox.
 #
 # Usage:
+#   chmod +x osint_firefox.sh
 #   ./osint_firefox.sh
 #
-# Launch the installed profile manually:
+# Manual launch:
 #   firefox --no-remote -P Osint
-#
-# Requirements:
-#   Firefox, curl or wget, unzip, awk, and standard Linux utilities.
 #
 # =============================================================================
 
@@ -69,7 +67,7 @@ PROFILE_DIR=""
 PROFILE_CREATED=0
 
 # =============================================================================
-# OUTPUT HELPERS
+# TERMINAL OUTPUT
 # =============================================================================
 
 line() {
@@ -104,6 +102,10 @@ fatal() {
     exit 1
 }
 
+# =============================================================================
+# CLEANUP
+# =============================================================================
+
 cleanup() {
     local exit_code=$?
 
@@ -112,10 +114,14 @@ cleanup() {
     fi
 
     if (( exit_code != 0 )) && (( PROFILE_CREATED == 1 )); then
-        warn "Installation failed after profile creation."
-        warn "The Osint profile may still exist at:"
-        printf '    %s\n' "${PROFILE_DIR:-Unknown}"
-        warn "Inspect it before attempting another installation."
+        warn "Installation did not complete successfully."
+        warn "The newly created profile may still exist."
+
+        if [[ -n "$PROFILE_DIR" ]]; then
+            printf '    Profile: %s\n' "$PROFILE_DIR"
+        fi
+
+        warn "Inspect the profile before running the installer again."
     fi
 
     return "$exit_code"
@@ -128,55 +134,54 @@ trap cleanup EXIT
 # =============================================================================
 
 banner() {
-    clear 2>/dev/null || true
+    printf '\033[2J\033[H' 2>/dev/null || true
 
     printf '%b\n' "${CYAN}"
     cat <<'EOF'
-   _____                 __ _      _______                 _
-  |  ___| __ ___  ___ __/ _| |_   |  ___(_)_ __ ___  ___  / |
-  | |_ | '__/ _ \/ __|  _| __| |  | |_  | | '__/ _ \/ _ \ | |
-  |  _|| | | (_) \__ \ | | |_| |  |  _| | | | |  __/  __/ | |
-  |_|  |_|  \___/|___/_|  \__|_|  |_|   |_|_|  \___|\___| |_|
-
-                  FRESH FORENSICS
-                 OSINT PROFILE SETUP
+ _____ _          _____         
+|  ___(_)_ __ ___|  ___|____  __
+| |_  | | '__/ _ \ |_ / _ \ \/ /
+|  _| | | | |  __/  _| (_) >  < 
+|_|   |_|_|  \___|_|  \___/_/\_\
+                                
+       FRESH FORENSICS
+     OSINT PROFILE SETUP
 EOF
     printf '%b\n' "${RESET}"
 
-    printf '\n'
-    printf '%b\n' "${BOLD}${WHITE}  Automate your OSINT browser setup.${RESET}"
+    printf '%b\n' "${BOLD}${WHITE}Automate your OSINT browser setup.${RESET}"
     printf '\n'
 }
 
 # =============================================================================
-# DEPENDENCY CHECKS
+# DEPENDENCIES
 # =============================================================================
 
 check_dependencies() {
     section "DEPENDENCY CHECK"
 
     local missing=()
+    local cmd
 
-    if command -v curl >/dev/null 2>&1; then
-        :
-    elif command -v wget >/dev/null 2>&1; then
-        :
-    else
-        missing+=("curl or wget")
-    fi
-
-    for cmd in unzip awk cp find mktemp; do
+    for cmd in awk cp find mktemp head; do
         if ! command -v "$cmd" >/dev/null 2>&1; then
             missing+=("$cmd")
         fi
     done
 
+    if ! command -v curl >/dev/null 2>&1 &&
+       ! command -v wget >/dev/null 2>&1; then
+        missing+=("curl or wget")
+    fi
+
+    if ! command -v unzip >/dev/null 2>&1; then
+        missing+=("unzip")
+    fi
+
     if (( ${#missing[@]} > 0 )); then
         error "Missing required dependencies:"
-
         printf '    %s\n' "${missing[@]}"
-
-        fatal "Install the missing dependencies and run the script again."
+        fatal "Install the missing dependencies and try again."
     fi
 
     success "Required utilities are available."
@@ -195,21 +200,12 @@ find_firefox() {
     elif command -v firefox-esr >/dev/null 2>&1; then
         FIREFOX_BIN="$(command -v firefox-esr)"
 
-    elif command -v flatpak >/dev/null 2>&1 &&
-         flatpak info org.mozilla.firefox >/dev/null 2>&1; then
-
-        FIREFOX_BIN="flatpak"
-
     else
         fatal "Firefox was not found. Install Firefox before continuing."
     fi
 
-    success "Firefox launcher detected: $FIREFOX_BIN"
-
-    if [[ "$FIREFOX_BIN" == "flatpak" ]]; then
-        warn "Flatpak requires a separate profile path check."
-        fatal "This version of the installer requires additional Flatpak profile handling."
-    fi
+    success "Firefox launcher detected."
+    info "Launcher: $FIREFOX_BIN"
 }
 
 # =============================================================================
@@ -217,14 +213,14 @@ find_firefox() {
 # =============================================================================
 
 find_profiles_ini() {
-    local candidates=(
-        "$HOME/.mozilla/firefox/profiles.ini"
+    local candidate
+
+    local -a candidates=(
         "$HOME/.config/mozilla/firefox/profiles.ini"
+        "$HOME/.mozilla/firefox/profiles.ini"
         "$HOME/snap/firefox/common/.mozilla/firefox/profiles.ini"
         "$HOME/.var/app/org.mozilla.firefox/.mozilla/firefox/profiles.ini"
     )
-
-    local candidate
 
     for candidate in "${candidates[@]}"; do
         if [[ -f "$candidate" ]]; then
@@ -236,61 +232,60 @@ find_profiles_ini() {
     return 1
 }
 
+# =============================================================================
+# PROFILE LOOKUP
+# =============================================================================
+
 get_profile_path() {
     local profile_name="$1"
     local ini_file="$2"
 
     awk -v target="$profile_name" '
-        /^\[Profile[0-9]+\]/ {
-            if (found && path != "") {
-                print path "|" relative
-                exit
-            }
-
-            found = 0
-            path = ""
-            relative = 1
+        /^\[/ {
+            section = $0
+            next
         }
 
-        /^\[Install/ {
-            found = 0
+        section ~ /^\[Profile[0-9]+\]$/ && /^Name=/ {
+            names[section] = substr($0, 6)
         }
 
-        /^Name=/ {
-            if (substr($0, 6) == target) {
-                found = 1
-            }
+        section ~ /^\[Profile[0-9]+\]$/ && /^Path=/ {
+            paths[section] = substr($0, 6)
         }
 
-        /^Path=/ {
-            path = substr($0, 6)
-        }
-
-        /^IsRelative=/ {
-            relative = substr($0, 12)
+        section ~ /^\[Profile[0-9]+\]$/ && /^IsRelative=/ {
+            relative[section] = substr($0, 12)
         }
 
         END {
-            if (found && path != "") {
-                print path "|" relative
+            for (s in names) {
+                if (names[s] == target && paths[s] != "") {
+                    r = relative[s]
+
+                    if (r == "") {
+                        r = "1"
+                    }
+
+                    print paths[s] "|" r
+                    exit
+                }
             }
         }
-    ' "$ini_file" | head -n 1
+    ' "$ini_file"
 }
 
 resolve_profile_path() {
     local profile_entry="$1"
-    local base_dir
-
     local relative_path
     local is_relative
+    local base_dir
 
     relative_path="${profile_entry%|*}"
     is_relative="${profile_entry##*|}"
 
-    base_dir="$(dirname "$PROFILES_INI")"
-
     if [[ "$is_relative" == "1" ]]; then
+        base_dir="$(dirname "$PROFILES_INI")"
         PROFILE_DIR="$base_dir/$relative_path"
     else
         PROFILE_DIR="$relative_path"
@@ -304,48 +299,61 @@ resolve_profile_path() {
 create_profile() {
     section "PROFILE CREATION"
 
-    if ! find_profiles_ini; then
-        fatal "Could not locate an existing Firefox profiles.ini file."
-    fi
+    local profile_entry=""
+    local create_log="$TEMP_DIR/profile-creation.log"
 
-    info "Profile configuration: $PROFILES_INI"
+    if find_profiles_ini; then
+        info "Profile configuration: $PROFILES_INI"
 
-    local existing_profile
+        profile_entry="$(get_profile_path "$PROFILE_NAME" "$PROFILES_INI")"
 
-    existing_profile="$(get_profile_path "$PROFILE_NAME" "$PROFILES_INI" || true)"
-
-    if [[ -n "$existing_profile" ]]; then
-        fatal "A profile named '$PROFILE_NAME' already exists. No changes were made."
+        if [[ -n "$profile_entry" ]]; then
+            fatal "A profile named '$PROFILE_NAME' already exists. Remove it before continuing."
+        fi
+    else
+        info "No existing profiles.ini found. Firefox will initialize its profile configuration."
     fi
 
     info "Creating Firefox profile: $PROFILE_NAME"
 
-    if ! "$FIREFOX_BIN" -CreateProfile "$PROFILE_NAME"; then
-        fatal "Firefox could not create the requested profile."
-    fi
+    # Firefox can emit sandbox warnings even when profile creation succeeds.
+    # Capture the output and verify registration rather than trusting the
+    # command's exit status alone.
 
-    PROFILE_CREATED=1
+    "$FIREFOX_BIN" -CreateProfile "$PROFILE_NAME" \
+        >"$create_log" 2>&1 || true
 
-    # Firefox may update profiles.ini during profile creation.
+    # Firefox may create profiles.ini in a different supported location.
     if ! find_profiles_ini; then
-        fatal "Firefox created a profile, but profiles.ini could not be located."
+        if [[ -s "$create_log" ]]; then
+            warn "Firefox profile creation output:"
+            cat "$create_log"
+        fi
+
+        fatal "Could not locate profiles.ini after profile creation."
     fi
 
-    local profile_entry
-
-    profile_entry="$(get_profile_path "$PROFILE_NAME" "$PROFILES_INI" || true)"
+    profile_entry="$(get_profile_path "$PROFILE_NAME" "$PROFILES_INI")"
 
     if [[ -z "$profile_entry" ]]; then
-        fatal "Firefox did not register the new profile as expected."
+        if [[ -s "$create_log" ]]; then
+            warn "Firefox profile creation output:"
+            cat "$create_log"
+        fi
+
+        fatal "Firefox did not register the Osint profile."
     fi
 
     resolve_profile_path "$profile_entry"
 
     if [[ ! -d "$PROFILE_DIR" ]]; then
-        fatal "The registered profile directory does not exist."
+        fatal "The registered profile directory does not exist: $PROFILE_DIR"
     fi
 
+    PROFILE_CREATED=1
+
     success "Firefox profile registered successfully."
+    info "Profile configuration: $PROFILES_INI"
     info "Profile directory: $PROFILE_DIR"
 }
 
@@ -356,20 +364,19 @@ create_profile() {
 download_template() {
     section "TEMPLATE DOWNLOAD"
 
-    TEMP_DIR="$(mktemp -d "${TMPDIR:-/tmp}/osint-firefox.XXXXXX")"
-
     local archive="$TEMP_DIR/ff-template.zip"
 
-    info "Downloading OSINT Firefox template..."
+    info "Downloading the Fresh Forensics OSINT template..."
+    info "Source: GitHub Releases"
 
     if command -v curl >/dev/null 2>&1; then
         if ! curl -fL --retry 2 --connect-timeout 15 \
             "$TEMPLATE_URL" -o "$archive"; then
-            fatal "Template download failed. Check the repository URL."
+            fatal "Template download failed. Check the release URL."
         fi
     else
         if ! wget -O "$archive" "$TEMPLATE_URL"; then
-            fatal "Template download failed. Check the repository URL."
+            fatal "Template download failed. Check the release URL."
         fi
     fi
 
@@ -394,6 +401,9 @@ install_template() {
     local archive="$TEMP_DIR/ff-template.zip"
     local extract_dir="$TEMP_DIR/extracted"
     local source_dir
+    local entry
+    local count=0
+    local only_entry=""
 
     mkdir -p "$extract_dir"
 
@@ -403,16 +413,13 @@ install_template() {
         fatal "Could not extract the template archive."
     fi
 
-    # If the archive contains one enclosing directory, use its contents.
-    local -a entries=("$extract_dir"/* "$extract_dir"/.[!.]*)
+    # Handle archives that contain a single enclosing directory.
 
-    local entry
-    local count=0
-    local only_entry=""
+    shopt -s dotglob nullglob
+    local -a entries=("$extract_dir"/*)
+    shopt -u dotglob nullglob
 
     for entry in "${entries[@]}"; do
-        [[ -e "$entry" ]] || continue
-
         ((count += 1))
         only_entry="$entry"
     done
@@ -427,15 +434,17 @@ install_template() {
         fatal "The template archive contains no files."
     fi
 
-    info "Copying template files into the Osint profile..."
+    info "Installing template into the Osint profile..."
 
-    cp -a "$source_dir"/. "$PROFILE_DIR"/
+    if ! cp -a "$source_dir"/. "$PROFILE_DIR"/; then
+        fatal "Failed to copy template files into the profile."
+    fi
 
-    success "OSINT template installed successfully."
+    success "Template files installed."
 }
 
 # =============================================================================
-# LAUNCH PROMPT
+# LAUNCH PROFILE
 # =============================================================================
 
 launch_profile() {
@@ -444,8 +453,8 @@ launch_profile() {
     printf '\n'
 
     success "Your OSINT Firefox profile is ready."
-    printf '\n'
 
+    printf '\n'
     printf '%b\n' "${CYAN}Profile name:${RESET}      $PROFILE_NAME"
     printf '%b\n' "${CYAN}Profile directory:${RESET} $PROFILE_DIR"
 
@@ -458,16 +467,20 @@ launch_profile() {
 
     case "$answer" in
         [Yy]|[Yy][Ee][Ss])
-            info "Launching Firefox with the Osint profile..."
+            info "Launching Firefox..."
 
-            "$FIREFOX_BIN" --no-remote -P "$PROFILE_NAME" \
-                >/dev/null 2>&1 &
-
-            success "Firefox launch requested."
+            if "$FIREFOX_BIN" --no-remote -P "$PROFILE_NAME" \
+                >/dev/null 2>&1 & then
+                success "Firefox launch requested."
+            else
+                warn "Could not start Firefox automatically."
+                info "Launch it manually with:"
+                printf '    firefox --no-remote -P Osint\n'
+            fi
             ;;
 
         *)
-            info "You can launch the profile later using:"
+            info "You can launch the profile later with:"
             printf '\n'
             printf '%b\n' "${GREEN}firefox --no-remote -P Osint${RESET}"
             ;;
@@ -475,9 +488,7 @@ launch_profile() {
 
     printf '\n'
     line
-
     printf '%b\n' "${BOLD}${GREEN}  FRESH FORENSICS | OSINT READY${RESET}"
-
     line
     printf '\n'
 }
@@ -490,6 +501,9 @@ main() {
     banner
 
     check_dependencies
+
+    TEMP_DIR="$(mktemp -d "${TMPDIR:-/tmp}/osint-firefox.XXXXXX")"
+
     find_firefox
     create_profile
     download_template
