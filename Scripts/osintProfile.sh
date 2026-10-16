@@ -30,7 +30,7 @@ IFS=$'\n\t'
 SCRIPT_NAME="OSINT FIREFOX INSTALLER"
 PROFILE_NAME="Osint"
 
-TEMPLATE_URL="https://raw.githubusercontent.com/DouglasFreshHabian/OsintWorkshop/main/ff-template.zip"
+TEMPLATE_URL="https://github.com/DouglasFreshHabian/OsintWorkshop/releases/download/v1.0.0/ff-template.zip"
 
 # =============================================================================
 # COLORS
