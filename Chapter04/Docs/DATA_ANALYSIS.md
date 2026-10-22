@@ -123,6 +123,9 @@ Try a shorter search term, check spelling and punctuation, and inspect a sample 
 
 ⬅️ Continue to Data Acquisition for instructions on collecting an archive.
 
-<!--
-VGhleWNhbWVpbm15aG91c2VPY3RvYmVyMTFhcm91bmQ3YW13aGlsZUl3YXNvdXRvZnRvd25QbGVhc2VoZWxwbWVJZG9udGZlZWxzYWZl
+<!-- 
+    Fresh Forensics, LLC | Douglas Fresh Habian | 2026
+    github.com/DouglasFreshHabian
+    freshforensicsllc@tuta.com
 -->
+
