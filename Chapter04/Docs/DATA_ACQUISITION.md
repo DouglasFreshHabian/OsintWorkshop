@@ -107,3 +107,10 @@ Check the channel URL or `@handle`, and make sure the channel's videos are acces
 - 🔒 Protect collected data and avoid committing private investigation archives to a public repository.
 
 ➡️ Continue to Data Analysis to examine the archive with F.B.I.
+
+<!-- 
+    Fresh Forensics, LLC | Douglas Fresh Habian | 2026
+    github.com/DouglasFreshHabian
+    freshforensicsllc@tuta.com
+-->
+
