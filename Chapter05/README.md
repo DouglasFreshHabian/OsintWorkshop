@@ -1,5 +1,4 @@
 # 🔎 Chapter 05 — Public Archives & Data Mining
-
 ## 🐧 Turning Publicly Available Data Into Actionable Intelligence
 
 ### 🎯 Chapter Overview
@@ -18,9 +17,7 @@ The goal is to develop practical skills for working with large datasets, underst
 
 ## 📚 Walkthroughs & Investigations
 
-### 🗳️ 1. Analyzing Ohio Voter Data
-
-**File:** `Analyze_Ohio_Voter_Data.md`
+### 🗳️ 1. [Analyzing Ohio Voter Data](https://github.com/DouglasFreshHabian/OsintWorkshop/blob/main/Chapter05/Analyze_Ohio_Voter_Data.md)
 
 Explore publicly available Ohio voter records and learn how to work with large CSV datasets using Linux command-line utilities.
 
@@ -32,9 +29,7 @@ Topics include:
 - Extracting information from structured datasets.
 - Understanding the investigative potential and privacy implications of public records.
 
-### 🔐 2. Compilation of Many Breaches (COMB)
-
-**File:** `Compilation_of_Many_Breaches.md`
+### 🔐 2. [Compilation of Many Breaches (COMB)](https://github.com/DouglasFreshHabian/OsintWorkshop/blob/main/Chapter05/Compilation_of_Many_Breaches.md)
 
 Investigate COMB (Compilation of Many Breaches), a massive collection of historical breach data.
 
@@ -47,9 +42,7 @@ Topics include:
 - Understanding historical credential exposure.
 - Examining the security implications of password reuse.
 
-### 📖 3. Leveraging the Internet Archive for Books and Research Material
-
-**File:** `Leverage_Internet_Archive_For_Books_and_Research_Material.md`
+### 📖 3. [Leveraging the Internet Archive for Books and Research Material](https://github.com/DouglasFreshHabian/OsintWorkshop/blob/main/Chapter05/Leverage_Internet_Archive_For_Books_and_Research_Material.md)
 
 Learn how to use the Internet Archive as a research resource through its command-line interface.
 
@@ -61,9 +54,7 @@ Topics include:
 - Downloading archived documents.
 - Using public archives as an investigative resource.
 
-### 💼 4. LinkedIn 2021 Data Scrape
-
-**File:** `LinkedIn_2021_Data_Scrape.md`
+### 💼 4. [LinkedIn 2021 Data Scrape](https://github.com/DouglasFreshHabian/OsintWorkshop/blob/main/Chapter05/LinkedIn_2021_Data_Scrape.md)
 
 Explore the historical LinkedIn 2021 data scrape and demonstrate how archived social media datasets can contribute to OSINT investigations.
 
@@ -76,9 +67,7 @@ Topics include:
 - Examining historical social media information.
 - Understanding the privacy implications of exposed personal information.
 
-### 🌐 5. Mining Giganews and Usenet Archives
-
-**File:** `Mining_Giganews_and_Usenet.md`
+### 🌐 5. [Mining Giganews and Usenet Archives](https://github.com/DouglasFreshHabian/OsintWorkshop/blob/main/Chapter05/Mining_Giganews_and_Usenet.md)
 
 Explore the historical world of Usenet and discover how decades of archived discussions can become valuable OSINT research material.
 
@@ -91,9 +80,7 @@ Topics include:
 - Investigating historical digital footprints.
 - Extracting information from decades-old online discussions.
 
-### 🐉 6. RockYou2024 Password Compilation
-
-**File:** `RockYou_2024_Password_Breach.md`
+### 🐉 6. [RockYou2024 Password Compilation](https://github.com/DouglasFreshHabian/OsintWorkshop/blob/main/Chapter05/RockYou_2024_Password_Breach.md)
 
 Investigate RockYou2024, a massive compilation of exposed passwords, and explore the challenges of working with extremely large datasets on Linux.
 
@@ -106,9 +93,7 @@ Topics include:
 - Understanding the challenges of processing enormous datasets.
 - Examining the security implications of historical password exposure.
 
-### ⚰️ 7. Social Security Death Index (SSDI)
-
-**File:** `Social_Security_Death_Index.md`
+### ⚰️ 7. [Social Security Death Index (SSDI)](https://github.com/DouglasFreshHabian/OsintWorkshop/blob/main/Chapter05/Social_Security_Death_Index.md)
 
 Explore the Social Security Death Index and examine how historical public records can contribute to legitimate OSINT research.
 
@@ -147,16 +132,16 @@ Some of the tools and resources include:
 
 By completing these walkthroughs, you'll gain practical experience with:
 
-- Finding intelligence in public archives.
-- Acquiring large datasets using command-line tools.
-- Navigating the Internet Archive.
-- Working with compressed archives and massive files.
-- Searching structured and unstructured data.
-- Investigating historical digital footprints.
-- Understanding the long-term consequences of data breaches.
-- Using Linux utilities for large-scale data exploration.
-- Identifying relationships and investigative leads across different information sources.
-- Handling sensitive information responsibly.
+- 🔎 Finding intelligence in public archives.
+- 📥 Acquiring large datasets using command-line tools.
+- 🗄️ Navigating the Internet Archive.
+- 📦 Working with compressed archives and massive files.
+- 🔍 Searching structured and unstructured data.
+- 🕵️ Investigating historical digital footprints.
+- 🔐 Understanding the long-term consequences of data breaches.
+- 🐧 Using Linux utilities for large-scale data exploration.
+- 🔗 Identifying relationships and investigative leads across different information sources.
+- 🛡️ Handling sensitive information responsibly.
 
 ---
 
@@ -195,5 +180,3 @@ This chapter demonstrates that OSINT isn't limited to searching Google, browsing
 Sometimes the most interesting discoveries come from downloading an archive, opening a terminal, and knowing how to search through the data.
 
 **The information is already out there. The challenge is knowing where to look and what to do with what you find.**
-
-🐧 Welcome to Chapter 05 of the OsintWorkshop.
