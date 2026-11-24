@@ -118,7 +118,89 @@ The results showed that my address appeared in historical breach records alongsi
 
 ⚠️ The presence of an old password does not establish that it remains valid today.
 
-### 6. 🛡️ Understanding the Security Implications
+### 6. 🔍 Searching COMB With h8mail
+
+We've already explored COMB's built-in query scripts. Now let's introduce another tool that can help automate searches across breach data: **h8mail**.
+
+🔗 GitHub repository: https://github.com/khast3x/h8mail
+
+h8mail is an email OSINT and password-exposure investigation tool. It supports searches using different target types and can work with local breach data.
+
+For this demonstration, we'll use its local database search functionality with our extracted COMB directory.
+
+#### 📦 Installing h8mail
+
+Install h8mail using pip:
+
+```bash
+pip3 install h8mail
+```
+
+💡 If your Linux distribution restricts system-wide Python package installations, use a virtual environment or pipx instead.
+
+#### 📧 Searching by Email Address
+
+We can use h8mail to investigate whether an email address appears in the COMB collection.
+
+Run:
+
+```bash
+h8mail -t test@example.com -sk -bc ./CompilationOfManyBreaches/
+```
+
+Replace `test@example.com` with an email address you are authorized to investigate.
+
+🔍 This uses the COMB integration to search for matching breach records.
+
+#### 🔑 Searching by Password
+
+We can also search for specific password strings in local breach data.
+
+For example:
+
+```bash
+h8mail -t "ExamplePassword123!" "AnotherTestPassword!" -sk -lb ./CompilationOfManyBreaches/ --loose
+```
+
+Here we're supplying example password strings as search targets and pointing h8mail at our local COMB directory.
+
+The `--loose` option enables less restrictive matching.
+
+⚠️ Use synthetic test strings or passwords you are authorized to investigate. Avoid publishing actual exposed passwords in screenshots, reports, or videos.
+
+#### 🌐 Searching by Domain
+
+Another option is to investigate a domain rather than an individual email address.
+
+For example:
+
+```bash
+h8mail -t example.com aegisec.org -sk -lb ./CompilationOfManyBreaches/ --loose
+```
+
+Replace the example domains with domains you own or are authorized to assess.
+
+This can help demonstrate how domain-based searches differ from searches targeting individual email addresses.
+
+#### 🧠 Understanding the Options
+
+Here's a quick breakdown of the options used in these examples:
+
+| Option | Purpose |
+|---|---|
+| `-t` | Specifies the search target or targets. |
+| `-sk` | Enables the skip-key option. |
+| `-bc` | Uses the Breach Compilation integration. |
+| `-lb` | Searches local breach data. |
+| `--loose` | Enables less restrictive matching. |
+
+💡 **Important:** h8mail's COMB integration and its local breach search are different search modes. Use the appropriate option for the type of query you're performing.
+
+Also, h8mail's results depend on the structure and format of the local data. If a search does not return expected results, check the tool's documentation and confirm that the dataset is compatible with the selected search mode.
+
+🚀 By adding h8mail to our workflow, we now have another way to investigate historical exposure using a dedicated OSINT tool.
+
+### 7. 🛡️ Understanding the Security Implications
 
 Historical breach collections demonstrate why unique passwords and multifactor authentication matter.
 
@@ -132,7 +214,7 @@ If a password has appeared in a breach, it should not be reused anywhere.
 - 🗝️ Use a reputable password manager.
 - 🚫 Never test exposed credentials against other people's accounts.
 
-### 7. 🧠 Final Thoughts
+### 8. 🧠 Final Thoughts
 
 COMB demonstrates the long-term consequences of data breaches.
 
